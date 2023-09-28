@@ -1,4 +1,4 @@
-package com.omega.origin;
+package com.omega.origin.simple_queue;
 
 import com.rabbitmq.client.*;
 
