@@ -5,3 +5,6 @@ spring:
     virtual-host: / # 虚拟主机
     username: guest # 用户名
     password: guest # 密码
+#    listener:
+#      simple:         # 可以是 simple 或者 direct
+#        prefetch: 1   # 设置预取值, 每次只能获取一条消息, 处理完后才获取下一条消息

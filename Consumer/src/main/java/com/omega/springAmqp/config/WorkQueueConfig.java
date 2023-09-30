@@ -4,22 +4,21 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 /**
- * Class SimpleQueueConfig
+ * Class WorkQueueConfig
  *
  * @author KennySo
- * @date 2023/9/29
+ * @date 2023/10/1
  */
 @Configuration
-public class SimpleQueueConfig {
+public class WorkQueueConfig {
 
     /**
-     * 声明 基本消息队列
-     * @return queue
+     * 声明 工作队列
+     * @return work queue
      */
     @Bean
-    public Queue simpleQueue() {
-        return new Queue("simple.queue");
+    public Queue workQueue() {
+        return new Queue("work.queue");
     }
 }

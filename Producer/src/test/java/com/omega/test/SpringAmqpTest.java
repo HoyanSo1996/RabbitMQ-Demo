@@ -30,4 +30,16 @@ public class SpringAmqpTest {
         // (这里queueName所在的参数位是routingKey, 即没有exchange和routingKey时, routingKey --> queue)
         rabbitTemplate.convertAndSend(queueName, message);
     }
+
+    /**
+     * send message to work queue.
+     */
+    @Test
+    public void testSendMsgToWorkQueue() {
+        String queueName = "work.queue";
+        String message = ". hello, work queue!";
+        for (int i = 1; i <= 50; i++) {
+            rabbitTemplate.convertAndSend(queueName, i + message);
+        }
+    }
 }
