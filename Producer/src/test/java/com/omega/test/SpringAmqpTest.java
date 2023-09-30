@@ -42,4 +42,15 @@ public class SpringAmqpTest {
             rabbitTemplate.convertAndSend(queueName, i + message);
         }
     }
+
+    /**
+     * send message to fanout queue
+     */
+    @Test
+    public void testSendMsgToFanoutQueue() {
+        String exchangeName = "fanout.exchange";
+        String routingKey = "";
+        String message = "hello, fanout queue!";
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, message);
+    }
 }
