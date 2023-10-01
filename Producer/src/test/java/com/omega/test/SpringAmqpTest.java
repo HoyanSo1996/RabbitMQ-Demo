@@ -64,4 +64,16 @@ public class SpringAmqpTest {
         rabbitTemplate.convertAndSend(exchangeName, "yellow", "黄色警报!");
         rabbitTemplate.convertAndSend(exchangeName, "red", "红色警报!");
     }
+
+    /**
+     * send message to topic queue
+     */
+    @Test
+    public void testSendMsgToTopicQueue() {
+        String exchangeName = "topic.exchange";
+        rabbitTemplate.convertAndSend(
+                exchangeName, "china.news", "中国新闻!");
+        rabbitTemplate.convertAndSend(
+                exchangeName, "japan.news", "日本新闻!");
+    }
 }
