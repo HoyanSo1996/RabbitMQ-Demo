@@ -53,4 +53,15 @@ public class SpringAmqpTest {
         String message = "hello, fanout queue!";
         rabbitTemplate.convertAndSend(exchangeName, routingKey, message);
     }
+
+    /**
+     * send message to direct queue
+     */
+    @Test
+    public void testSendMsgToDirectQueue() {
+        String exchangeName = "direct.exchange";
+        rabbitTemplate.convertAndSend(exchangeName, "blue", "蓝色警报!");
+        rabbitTemplate.convertAndSend(exchangeName, "yellow", "黄色警报!");
+        rabbitTemplate.convertAndSend(exchangeName, "red", "红色警报!");
+    }
 }
