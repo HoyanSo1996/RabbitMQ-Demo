@@ -1,12 +1,15 @@
 package com.omega.test;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Class SpringAmqpTest
@@ -14,6 +17,7 @@ import java.util.Map;
  * @author KennySo
  * @date 2023/9/29
  */
+@Slf4j
 @SpringBootTest
 public class SpringAmqpTest {
 
@@ -89,5 +93,36 @@ public class SpringAmqpTest {
         msg.put("name", "张三");
         msg.put("age", 21);
         rabbitTemplate.convertAndSend("object.queue", msg);
+    }
+
+    /**
+     * test producer confirmation mechanism
+     */
+    @Test
+    public void testSendMsgToTestQueue() {
+        // 1.设置消息
+        String message = "hello, test queue!";
+
+        // 2.设置 correlationData
+        // 2.1 设置 消息Id
+        CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+        // 2.2 设置 confirmCallback
+        correlationData.getFuture().addCallback(result -> {
+            if (result.isAck()) {
+                // ACK
+                log.info("消息投递到exchange成功, 消息ID: {}", correlationData.getId());
+            } else {
+                // nACK  (通过设置错误 exchange 测试)
+                log.error("消息投递到exchange失败, 消息ID: {}, 原因: {}", correlationData.getId(), result.getReason());
+                // 重发消息 Todo
+            }
+        }, ex -> {
+            // 消息发送的过程中出现异常, 没有收到ACK/nACK回执.
+            log.error("消息发送异常, ID: {}, 原因: {}", correlationData.getId(), ex.getMessage());
+            // 重发消息 Todo
+        });
+
+        // 3.发送消息
+        rabbitTemplate.convertAndSend("test.exchange", "test", message, correlationData);
     }
 }

@@ -3,5 +3,16 @@ spring:
     host: 192.168.163.101 # 主机名
     port: 5672 # 端口
     virtual-host: / # 虚拟主机
-    username: guest # 用户名
-    password: guest # 密码
+    username: guest
+    password: guest
+    # 1.开启 publish-confirm, 支持两种类型：
+    # (1) simple: 同步等待 confirm 结果, 直到超时.
+    # (2) correlation: 异步回调, 定义 ConfirmCallback, MQ 返回结果时会回调这个 ConfirmCallback
+    publisher-confirm-type: correlated
+    # 2.开启 publish-return, 同样是基于Callback机制, 不过定义的是ReturnCallback
+    publisher-returns: true
+    # 3.定义消息路由失败时的策略.
+    # (1) true: 则调用ReturnCallback;
+    # (2) false: 则直接丢弃消息.
+    template:
+      mandatory: true
